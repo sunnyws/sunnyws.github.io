@@ -1,0 +1,300 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>微服务实战(六) Gateway 网关 | SunnyWs'Blog</title><meta name="keywords" content="微服务"><meta name="author" content="SunnyWs"><meta name="copyright" content="SunnyWs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="微服务实战(六) Gateway 网关概述在微服务众多的服务的治理过程中，服务网关的作用在微服务框架中可以提供统一入口、鉴权校验、动态路由、降低耦合度的功能，关于springcloud的网关有三个，分别是zuul、zuul2和gateway，其中zuul&#x2F;zuul2是Netflix公司开发的，但是因为zuul的性能不够好，zuul2的开发内部有歧义，所以springcloud便自研了一套网关——g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务实战(六) Gateway 网关">
+<meta property="og:url" content="https://sunnyws.com/posts/f8ec904c/index.html">
+<meta property="og:site_name" content="SunnyWs&#39;Blog">
+<meta property="og:description" content="微服务实战(六) Gateway 网关概述在微服务众多的服务的治理过程中，服务网关的作用在微服务框架中可以提供统一入口、鉴权校验、动态路由、降低耦合度的功能，关于springcloud的网关有三个，分别是zuul、zuul2和gateway，其中zuul&#x2F;zuul2是Netflix公司开发的，但是因为zuul的性能不够好，zuul2的开发内部有歧义，所以springcloud便自研了一套网关——g">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(六).jpg">
+<meta property="article:published_time" content="2020-10-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-26T02:21:50.346Z">
+<meta property="article:author" content="SunnyWs">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(六).jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sunnyws.com/posts/f8ec904c/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.3.0',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: SunnyWs","link":"链接: ","source":"来源: SunnyWs'Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-03-26 10:21:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {
+  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+
+  const autoChangeMode = '1'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }
+})()</script><meta name="baidu-site-verification" content="f3mDCE12Ro" /><link rel="stylesheet" href="//at.alicdn.com/t/font_2021129_6x83zxue7h.css"><style type="text/css">#toggle-sidebar {left:100px}</style><meta name="generator" content="Hexo 5.3.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/favicon.png" onerror="onerror=null;src='/img/cover/index.jpg'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">29</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">12</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-liuyan"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw iconfont icon-qita1"></i><span> 其他</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%88%98-%E5%85%AD-Gateway-%E7%BD%91%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">微服务实战(六) Gateway 网关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gateway-Nacos-%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">1.4.</span> <span class="toc-text">Gateway+Nacos 实现动态路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0POM"><span class="toc-number">1.4.1.</span> <span class="toc-text">添加POM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">添加配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">1.4.3.</span> <span class="toc-text">添加配置类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nacos%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.4.</span> <span class="toc-text">Nacos添加配置</span></a></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(六).jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">SunnyWs'Blog</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-liuyan"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw iconfont icon-qita1"></i><span> 其他</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">微服务实战(六) Gateway 网关</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-10-12T16:00:00.000Z" title="发表于 2020-10-13 00:00:00">2020-10-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-03-26T02:21:50.346Z" title="更新于 2021-03-26 10:21:50">2021-03-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="微服务实战-六-Gateway-网关"><a href="#微服务实战-六-Gateway-网关" class="headerlink" title="微服务实战(六) Gateway 网关"></a>微服务实战(六) Gateway 网关</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在微服务众多的服务的治理过程中，服务网关的作用在微服务框架中可以提供<code>统一入口</code>、<code>鉴权校验</code>、<code>动态路由</code>、<code>降低耦合度</code>的功能，关于springcloud的网关有三个，分别是zuul、zuul2和gateway，其中zuul/zuul2是Netflix公司开发的，但是因为zuul的性能不够好，zuul2的开发内部有歧义，所以springcloud便自研了一套网关——gateway。</p>
+<p>Spring Cloud Gateway 作为 Spring Cloud 生态系中的网关，其目标是替代 Netflix Zuul，它不仅提供统一的路由方式，并且基于 Filter 链的方式提供了网关基本的功能，例如：安全、监控/埋点和限流等。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li><p>Route</p>
+<p>Route 是网关的基础元素，由 ID、目标 URI、断言、过滤器组成。当请求到达网关时，由 Gateway Handler Mapping 通过断言进行路由匹配（Mapping），当断言为真时，匹配到路由。</p>
+</li>
+<li><p>Predicate</p>
+<p>Predicate 是 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://c.biancheng.net/java/">Java</a> 8 中提供的一个函数。输入类型是 Spring Framework ServerWebExchange。它允许开发人员匹配来自 HTTP 的请求，例如请求头或者请求参数。简单来说它就是匹配条件。</p>
+</li>
+<li><p>Filter</p>
+<p>Filter 是 Gateway 中的过滤器，可以在请求发出前后进行一些业务上的处理。</p>
+</li>
+</ul>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/contentimg/gateway1.png"></p>
+<ol>
+<li>客户端向Spring Cloud Gateway发出请求,然后在<code>Gateway Handler Mapping</code>中找到与请求相匹配的路由，将其发送到<code>Gateway web hander</code></li>
+<li>Handler再通过指定的过滤器链来将请求发送到我们实际的服务执行业务逻辑，然后返回。过滤器之间用虚线分开是因为过滤器可能会在发送代理请求之前( “pre” )或之后( “post” )执行业务逻辑。</li>
+<li>Filter在”pre” 类型的过滤器可以做参数校验、权限校验、流量监控、日志输出、协议转换等,在”post”类型的过滤器中可以做响应内容、响应头的修改,日志的输出，流量监控等有着非常重要的作用。</li>
+</ol>
+<h3 id="Gateway-Nacos-实现动态路由"><a href="#Gateway-Nacos-实现动态路由" class="headerlink" title="Gateway+Nacos 实现动态路由"></a>Gateway+Nacos 实现动态路由</h3><h4 id="添加POM"><a href="#添加POM" class="headerlink" title="添加POM"></a><strong>添加POM</strong></h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--gateway--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- Nacos --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="添加配置"><a href="#添加配置" class="headerlink" title="添加配置"></a><strong>添加配置</strong></h4><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">sunnyws-gateway</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="number">172.16</span><span class="number">.220</span><span class="number">.50</span><span class="string">:8848</span></span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">e90d261b-9c05-4bcb-b99f-b419d952737a</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">locator:</span></span><br><span class="line">          <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">gateway:</span></span><br><span class="line">  <span class="attr">nacos:</span></span><br><span class="line">    <span class="attr">serverAddr:</span> <span class="number">172.16</span><span class="number">.220</span><span class="number">.50</span><span class="string">:8848</span></span><br><span class="line">    <span class="attr">namespace:</span> <span class="string">e90d261b-9c05-4bcb-b99f-b419d952737a</span></span><br><span class="line">    <span class="attr">dataId:</span> <span class="string">dynamic-route</span></span><br><span class="line">    <span class="attr">timeout:</span> <span class="number">5000</span></span><br></pre></td></tr></table></figure>
+<h4 id="添加配置类"><a href="#添加配置类" class="headerlink" title="添加配置类"></a><strong>添加配置类</strong></h4><ul>
+<li>Nacos配置类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;gateway.nacos&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NacosProperties</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String serverAddr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String namespace;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String group = <span class="string">&quot;DEFAULT_GROUP&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String dataId = <span class="string">&quot;dynamic-route&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> timeout = <span class="number">5000</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GatewayRouteList</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;RouteDefinition&gt; routes;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从Nacos上初始化路由并动态监听</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicRouteNacosConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RouteDefinitionWriter routeDefinitionWriter;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> NacosProperties nacosProperties;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initRoute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">            properties.put(<span class="string">&quot;serverAddr&quot;</span>, nacosProperties.getServerAddr());</span><br><span class="line">            properties.put(<span class="string">&quot;namespace&quot;</span>, nacosProperties.getNamespace());</span><br><span class="line">            ConfigService configService = NacosFactory.createConfigService(properties);</span><br><span class="line">            String content = configService.getConfig(nacosProperties.getDataId(), nacosProperties.getGroup(), nacosProperties.getTimeout());</span><br><span class="line">            log.info(<span class="string">&quot;初始化网关路由开始&quot;</span>);</span><br><span class="line">            updateRoute(content);</span><br><span class="line">            log.info(<span class="string">&quot;初始化网关路由完成&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//开户监听，实现动态</span></span><br><span class="line">            configService.addListener(nacosProperties.getDataId(), nacosProperties.getGroup(), <span class="keyword">new</span> Listener() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">receiveConfigInfo</span><span class="params">(String configInfo)</span> </span>&#123;</span><br><span class="line">                    log.info(<span class="string">&quot;更新网关路由开始&quot;</span>);</span><br><span class="line">                    updateRoute(configInfo);</span><br><span class="line">                    log.info(<span class="string">&quot;更新网关路由完成&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> Executor <span class="title">getExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NacosException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;加载路由出错：&#123;&#125;&quot;</span>, e.getErrMsg());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@description</span>: 更新路由</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> content</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">    **/</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateRoute</span><span class="params">(String content)</span></span>&#123;</span><br><span class="line">        Yaml yaml = <span class="keyword">new</span> Yaml();</span><br><span class="line">        GatewayRouteList gatewayRouteList = yaml.loadAs(content, GatewayRouteList.class);</span><br><span class="line">        gatewayRouteList.getRoutes().forEach(route -&gt; &#123;</span><br><span class="line">            log.info(<span class="string">&quot;加载路由：&#123;&#125;,&#123;&#125;&quot;</span>, route.getId(), route);</span><br><span class="line">            routeDefinitionWriter.save(Mono.just(route)).subscribe();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加跨域配置</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsWebFilter <span class="title">corsFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        CorsConfiguration config = <span class="keyword">new</span> CorsConfiguration();</span><br><span class="line">        <span class="comment">// 允许cookies跨域</span></span><br><span class="line">        config.setAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">// #允许向该服务器提交请求的URI，*表示全部允许，在SpringMVC中，如果设成*，会自动转成当前请求头中的Origin</span></span><br><span class="line">        config.addAllowedOrigin(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        <span class="comment">// #允许访问的头信息,*表示全部</span></span><br><span class="line">        config.addAllowedHeader(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        <span class="comment">// 预检请求的缓存时间（秒），即在这个时间段里，对于相同的跨域请求不会再预检了</span></span><br><span class="line">        config.setMaxAge(<span class="number">18000L</span>);</span><br><span class="line">        <span class="comment">// 允许提交请求的方法类型，*表示全部允许</span></span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;OPTIONS&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;HEAD&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;GET&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;PUT&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;POST&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;DELETE&quot;);</span></span><br><span class="line"><span class="comment">//        config.addAllowedMethod(&quot;PATCH&quot;);</span></span><br><span class="line"></span><br><span class="line">        org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource source =</span><br><span class="line">                <span class="keyword">new</span> org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource(<span class="keyword">new</span> PathPatternParser());</span><br><span class="line">        source.registerCorsConfiguration(<span class="string">&quot;/**&quot;</span>, config);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsWebFilter(source);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>启动类添加<code>@EnableDiscoveryClient</code>允许注册到Nacos</p>
+</li>
+<li><p>启动类添加<code>@EnableConfigurationProperties</code>注入Nacos配置</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(NacosProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GateWayApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(GateWayApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Nacos添加配置"><a href="#Nacos添加配置" class="headerlink" title="Nacos添加配置"></a><strong>Nacos添加配置</strong></h4><ul>
+<li>根据Nacos配置及需求添加配置</li>
+</ul>
+<p><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/contentimg/gateway2.png"></p>
+<blockquote>
+<p>这只是gateway的基本使用，也可结合前面介绍的sentinel和ribbon实现负载均衡和限流。</p>
+</blockquote>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" rel="external nofollow noreferrer">SunnyWs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://sunnyws.com/posts/f8ec904c/">https://sunnyws.com/posts/f8ec904c/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sunnyws.com" target="_blank">SunnyWs'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(六).jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/94f54d0e/"><img class="prev-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/SpringBoot使用注解记录操作日志.jpg" onerror="onerror=null;src='/img/cover/index.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SpringBoot使用注解@Log记录操作日志</div></div></a></div><div class="next-post pull-right"><a href="/posts/9d3a5b2a/"><img class="next-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/Centos安装Redis.jpg" onerror="onerror=null;src='/img/cover/index.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Centos安装Redis</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/cbeb21bd/" title="微服务实战(一) 微服务架构简述"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(一).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-22</div><div class="title">微服务实战(一) 微服务架构简述</div></div></a></div><div><a href="/posts/ec81c193/" title="微服务实战(七) 基于Knife4jAggregationDesktop实现聚合OpenAPI文档"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(七).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-02</div><div class="title">微服务实战(七) 基于Knife4jAggregationDesktop实现聚合OpenAPI文档</div></div></a></div><div><a href="/posts/1dd572b4/" title="微服务实战(三) OpenFegin 声明式服务调用"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(三).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-22</div><div class="title">微服务实战(三) OpenFegin 声明式服务调用</div></div></a></div><div><a href="/posts/1beed924/" title="微服务实战(二) Nacos 动态服务发现、配置和服务管理平台"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(二).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-15</div><div class="title">微服务实战(二) Nacos 动态服务发现、配置和服务管理平台</div></div></a></div><div><a href="/posts/7a1077b7/" title="微服务实战(五) Seata 分布式事务"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(五).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-23</div><div class="title">微服务实战(五) Seata 分布式事务</div></div></a></div><div><a href="/posts/104c04d2/" title="微服务实战(四) Sentinel 服务的限流 熔断 降级"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(四).jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-11</div><div class="title">微服务实战(四) Sentinel 服务的限流 熔断 降级</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" style="background-image: url(https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(六).jpg)"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By SunnyWs</div><div class="icp"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><span>豫ICP备19019070号-1</span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const initData = {
+      el: '#vcomment',
+      appId: 'T2GJNCM0qQ4YiRqifywyUvbI-gzGzoHsz',
+      appKey: 'lc9PIjqrN3NDslBgWu7aVg7r',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"1":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/1.gif","2":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/2.gif","3":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/3.gif","4":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/4.gif","5":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/5.gif","6":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/6.gif","7":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/7.gif","8":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/8.gif","9":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/9.gif","10":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/10.gif","11":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/11.gif","12":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/12.gif","13":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/13.gif","14":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/14.gif","15":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/15.gif","16":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/16.gif","17":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/17.gif","18":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/18.gif","19":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/19.gif","20":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/20.gif","21":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/21.gif","22":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/22.gif","23":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/23.gif","24":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/24.gif","25":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/25.gif","26":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/26.gif","27":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/27.gif","28":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/28.gif","29":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/29.gif","30":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/30.gif","31":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/31.gif","32":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/32.gif","33":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/33.gif","34":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/34.gif","35":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/35.gif","36":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/36.gif","37":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/37.gif","38":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/38.gif","39":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/39.gif","40":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/40.gif","41":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/41.gif","42":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/42.gif","43":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/43.gif","44":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/44.gif","45":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/45.gif","46":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/46.gif","47":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/47.gif","48":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/48.gif","49":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/49.gif","50":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/50.gif","51":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/51.gif","52":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/52.gif","53":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/53.gif","54":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/54.gif","55":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/55.gif","56":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/56.gif","57":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/57.gif","58":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/58.gif","59":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/59.gif","60":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/60.gif","61":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/61.gif","62":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/62.gif","63":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/63.gif","64":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/64.gif","65":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/65.gif","66":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/66.gif","67":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/67.gif","68":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/68.gif","69":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/69.gif","70":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/70.gif","71":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/71.gif","72":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/72.gif","73":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/73.gif","74":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/74.gif","75":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/75.gif","76":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/76.gif","77":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/77.gif","78":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/78.gif","79":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/79.gif","80":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/80.gif","81":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/81.gif","82":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/82.gif","83":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/83.gif","84":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/84.gif","85":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/85.gif","86":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/86.gif","87":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/87.gif","88":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/88.gif","89":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/89.gif","90":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/90.gif","91":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/91.gif","92":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/92.gif","93":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/93.gif","94":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/94.gif","95":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/95.gif","96":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/96.gif","97":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/97.gif","98":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/98.gif","99":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/99.gif","100":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/100.gif","101":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/101.gif","102":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/102.gif","103":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/103.gif","104":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/104.gif","105":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/105.gif","106":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/106.gif","107":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/107.gif","108":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/108.gif","109":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/109.gif","110":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/110.gif","111":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/111.gif","112":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/112.gif","113":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/113.gif","114":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/114.gif","115":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/115.gif","116":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/116.gif","117":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/117.gif","118":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/118.gif","119":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/119.gif","120":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/120.gif","121":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/121.gif","122":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/122.gif","123":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/123.gif","124":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/124.gif","125":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/125.gif","126":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/126.gif","127":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/127.gif","128":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/128.gif","129":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/129.gif","130":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/130.gif","131":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/131.gif","132":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/132.gif","133":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/133.gif","134":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/134.gif","135":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/135.gif","136":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/136.gif","137":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/137.gif","138":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/138.gif","139":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/139.gif","140":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/140.gif","141":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/141.gif","142":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/142.gif","143":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/143.gif","144":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/144.gif","145":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/145.gif","146":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/146.gif","147":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/147.gif","148":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/148.gif","149":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/149.gif","150":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/150.gif","151":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/151.gif","152":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/152.gif","153":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/153.gif","154":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/154.gif","155":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/155.gif","156":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/156.gif","157":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/157.gif","158":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/158.gif","159":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/159.gif","160":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/160.gif","161":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/161.gif","162":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/162.gif","163":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/163.gif","164":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/164.gif","165":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/165.gif","166":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/166.gif","167":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/167.gif","168":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/168.gif","169":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/169.gif","170":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/170.gif","171":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/171.gif","172":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/172.gif","173":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/173.gif","174":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/174.gif","175":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/175.gif","176":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/176.gif","177":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/177.gif","178":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/178.gif","179":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/179.gif","180":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/180.gif","181":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/181.gif","182":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/182.gif","183":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/183.gif","184":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/184.gif","185":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/185.gif","186":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/186.gif","187":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/187.gif","188":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/188.gif","189":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/189.gif","190":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/190.gif","191":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/191.gif","192":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/192.gif","193":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/193.gif","194":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/0.gif","195":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/195.gif","196":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/196.gif","197":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/197.gif","198":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/198.gif","199":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/199.gif","200":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/200.gif","201":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/201.gif","202":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/202.gif","203":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/203.gif","204":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/204.gif","205":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/205.gif","206":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/206.gif","207":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/207.gif"},
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div class="aplayer no-destroy" data-id="7687642830" data-server="tencent" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="false" muted></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', '', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+
+document.addEventListener('pjax:send', function () {
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  $(window).off('scroll')
+
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
+
+})</script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"log":false});</script></body></html>

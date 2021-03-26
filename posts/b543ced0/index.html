@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RabbitMQ | SunnyWs'Blog</title><meta name="keywords" content="SpringBoot,RabbitMQ"><meta name="author" content="SunnyWs"><meta name="copyright" content="SunnyWs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="RabbitMQ何为RabbitMq?RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务，用Erlang语言。 RabbitMq原理 Provider：消息的生产者 Exchange：消息交换机 Binding：绑定，将交换机与队列进行绑定 Queue：即队列，用于存储消息 Consumer：消息的消费者，如果有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ">
+<meta property="og:url" content="https://sunnyws.com/posts/b543ced0/index.html">
+<meta property="og:site_name" content="SunnyWs&#39;Blog">
+<meta property="og:description" content="RabbitMQ何为RabbitMq?RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务，用Erlang语言。 RabbitMq原理 Provider：消息的生产者 Exchange：消息交换机 Binding：绑定，将交换机与队列进行绑定 Queue：即队列，用于存储消息 Consumer：消息的消费者，如果有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/RabbitMQ.jpg">
+<meta property="article:published_time" content="2020-08-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-26T02:21:50.326Z">
+<meta property="article:author" content="SunnyWs">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="RabbitMQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/RabbitMQ.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sunnyws.com/posts/b543ced0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.3.0',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: SunnyWs","link":"链接: ","source":"来源: SunnyWs'Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-03-26 10:21:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {
+  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+
+  const autoChangeMode = '1'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }
+})()</script><meta name="baidu-site-verification" content="f3mDCE12Ro" /><link rel="stylesheet" href="//at.alicdn.com/t/font_2021129_6x83zxue7h.css"><style type="text/css">#toggle-sidebar {left:100px}</style><meta name="generator" content="Hexo 5.3.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/favicon.png" onerror="onerror=null;src='/img/cover/index.jpg'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">29</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">12</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-liuyan"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw iconfont icon-qita1"></i><span> 其他</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RabbitMQ"><span class="toc-number">1.</span> <span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E4%B8%BARabbitMq"><span class="toc-number">1.0.1.</span> <span class="toc-text">何为RabbitMq?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMq%E5%8E%9F%E7%90%86"><span class="toc-number">1.0.2.</span> <span class="toc-text">RabbitMq原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.0.3.</span> <span class="toc-text">交换机类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Direct-Exchange"><span class="toc-number">1.0.3.1.</span> <span class="toc-text">Direct Exchange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fanout-Exchange"><span class="toc-number">1.0.3.2.</span> <span class="toc-text">Fanout Exchange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Topic-Exchange"><span class="toc-number">1.0.3.3.</span> <span class="toc-text">Topic Exchange</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85RabbitMq"><span class="toc-number">1.0.4.</span> <span class="toc-text">安装RabbitMq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBoot%E6%95%B4%E5%90%88RabbitMq"><span class="toc-number">1.0.5.</span> <span class="toc-text">SpringBoot整合RabbitMq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81RabbitMq%E4%B8%AD%E6%B6%88%E6%81%AF%E4%B8%8D%E4%BC%9A%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.0.6.</span> <span class="toc-text">如何保证RabbitMq中消息不会丢失</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rabbitmq%E5%B4%A9%E6%BA%83%E6%88%96%E8%80%85%E9%87%8D%E5%90%AF"><span class="toc-number">1.0.6.1.</span> <span class="toc-text">Rabbitmq崩溃或者重启</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81Exchange-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.0.6.1.1.</span> <span class="toc-text">1、Exchange 持久化</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81Queue-%E8%AE%BE%E7%BD%AE%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.0.6.1.2.</span> <span class="toc-text">2、Queue 设置持久化</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81Message%E6%8C%81%E4%B9%85%E5%8C%96%E5%8F%91%E9%80%81"><span class="toc-number">1.0.6.1.3.</span> <span class="toc-text">3、Message持久化发送</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Rabbitmq%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%97%B6%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.0.6.2.</span> <span class="toc-text">Rabbitmq生产者发送消息时丢失</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Rabbitmq%E6%B6%88%E8%B4%B9%E8%80%85%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF%E6%97%B6%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.0.6.3.</span> <span class="toc-text">Rabbitmq消费者消费消息时丢失</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/RabbitMQ.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">SunnyWs'Blog</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-liuyan"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw iconfont icon-qita1"></i><span> 其他</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">RabbitMQ</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-15T16:00:00.000Z" title="发表于 2020-08-16 00:00:00">2020-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-03-26T02:21:50.326Z" title="更新于 2021-03-26 10:21:50">2021-03-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h1><h3 id="何为RabbitMq"><a href="#何为RabbitMq" class="headerlink" title="何为RabbitMq?"></a>何为RabbitMq?</h3><p>RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务，用Erlang语言。</p>
+<h3 id="RabbitMq原理"><a href="#RabbitMq原理" class="headerlink" title="RabbitMq原理"></a>RabbitMq原理<img src= "/img/loading.gif" data-lazy-src="https://img-blog.csdnimg.cn/20200322184923138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MDE3NDQ4,size_16,color_FFFFFF,t_70#align=left&display=inline&height=773&margin=%5Bobject%20Object%5D&originHeight=773&originWidth=2011&status=done&style=none&width=2011"></h3><ol>
+<li><code>Provider</code>：消息的生产者</li>
+<li><code>Exchange</code>：消息交换机</li>
+<li><code>Binding</code>：绑定，将交换机与队列进行绑定</li>
+<li><code>Queue</code>：即队列，用于存储消息</li>
+<li><code>Consumer</code>：消息的消费者，如果有多个消费者同时订阅同一个Queue中的消息，Queue中的消息会被平摊给多个消费者</li>
+</ol>
+<p><strong>简单来说，就是交换机与相应队列进行绑定，生产者生产消息并发送到对应的交换机中，再由交换机将消息转到到队列中，消费者在从订阅的队列中获取消息进行消费。</strong></p>
+<h3 id="交换机类型"><a href="#交换机类型" class="headerlink" title="交换机类型"></a>交换机类型</h3><h4 id="Direct-Exchange"><a href="#Direct-Exchange" class="headerlink" title="Direct Exchange"></a>Direct Exchange</h4><p><strong>直连型交换机</strong>，根据消息携带的路由键将消息投递给对应队列。</p>
+<p>大致流程，有一个队列绑定到一个直连交换机上，同时赋予一个路由键 routing key 。<br>然后当一个消息携带着路由值为X（路由值需要<strong>完全匹配</strong>），这个消息通过生产者发送给交换机时，交换机就会根据这个路由值X去寻找绑定值也是X的队列。</p>
+<h4 id="Fanout-Exchange"><a href="#Fanout-Exchange" class="headerlink" title="Fanout Exchange"></a>Fanout Exchange</h4><p><strong>扇型交换机</strong>，这个交换机没有路由键概念，就算你绑了路由键也是无视的。 这个交换机在接收到消息后，会直接转发到绑定到它上面的所有队列。（消息转发速度较快一些）</p>
+<h4 id="Topic-Exchange"><a href="#Topic-Exchange" class="headerlink" title="Topic Exchange"></a>Topic Exchange</h4><p><strong>主题交换机</strong>，这个交换机其实跟直连交换机流程差不多，但是它的特点就是在它的路由键和绑定键之间是有规则的。(类似正则表达式，<strong>不需要完全匹配</strong>)</p>
+<h3 id="安装RabbitMq"><a href="#安装RabbitMq" class="headerlink" title="安装RabbitMq"></a><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.rabbitmq.com/download.html">安装RabbitMq</a></h3><p>Rabbit 安装需要搭建Erlang环境，采用docker安装较为简单</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">拉取镜像</span></span><br><span class="line">docker pull  rabbitmq:3-management</span><br><span class="line"><span class="meta">#</span><span class="bash">运行镜像  远程连接时阿里云服务器需要配置相应的安全组</span></span><br><span class="line">docker run -d  --name rabbit -p 15672:15672 -p 5672:5672  rabbitmq:3-management</span><br><span class="line"><span class="meta">#</span><span class="bash">进入容器内部</span></span><br><span class="line">docker exec -it  849d3cbe9e0d  bash</span><br><span class="line"><span class="meta">#</span><span class="bash">添加用户rabbitmqctl add_user 账号 密码</span></span><br><span class="line">rabbitmqctl add_user root root</span><br><span class="line"><span class="meta">#</span><span class="bash">设置角色rabbitmqctl set_user_tags 账号 角色</span></span><br><span class="line">rabbitmqctl set_user_tags root administrator</span><br><span class="line"><span class="meta">#</span><span class="bash">赋予权限 使用户root具有默认（/）这个virtual host中所有资源的配置、写、读权限以便管理其中的资源</span></span><br><span class="line">rabbitmqctl set_permissions -p / root &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SpringBoot整合RabbitMq"><a href="#SpringBoot整合RabbitMq" class="headerlink" title="SpringBoot整合RabbitMq"></a>SpringBoot整合RabbitMq</h3><p><strong>导入maven依赖</strong></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--rabbitmq--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>application.yml</strong></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="comment">#给项目来个名字</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">rabbitmq-provider</span></span><br><span class="line">  <span class="comment">#配置rabbitMq 服务器</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">*.*.*.*</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">root</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>以Direct Exchange为例</strong></p>
+<p><strong>rabbitmq配置类</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DirectRabbitConfig</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//队列 起名：TestDirectQueue</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Queue <span class="title">TestDirectQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Queue(<span class="string">&quot;TestDirectQueue&quot;</span>,<span class="keyword">true</span>);  <span class="comment">//true 是否持久 会持久化到磁盘中 rabbitmq重启后消息会依然存在  但会影响性能。改为false时需先确定队列中没有之前设为true产生的消息，否则会报错</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Direct交换机 起名：TestDirectExchange</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">DirectExchange <span class="title">TestDirectExchange</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DirectExchange(<span class="string">&quot;TestDirectExchange&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//绑定  将队列和交换机绑定, 并设置用于匹配键：TestDirectRouting</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">Binding <span class="title">bindingDirect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> BindingBuilder.bind(TestDirectQueue()).to(TestDirectExchange()).with(<span class="string">&quot;TestDirectRouting&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>生产者</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@EnableScheduling</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SendMessage</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RabbitTemplate rabbitTemplate;  <span class="comment">//使用RabbitTemplate,这提供了接收/发送等等方法</span></span><br><span class="line">    <span class="meta">@Scheduled(cron = &quot;0/1 * * * * ? &quot;)</span><span class="comment">//每秒执行一次</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendDirectMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String messageId = String.valueOf(UUID.randomUUID());</span><br><span class="line">        String messageData = <span class="string">&quot;这是个消息&quot;</span>;</span><br><span class="line">        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</span><br><span class="line">        Map&lt;String,Object&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;messageId&quot;</span>,messageId);</span><br><span class="line">        map.put(<span class="string">&quot;messageData&quot;</span>,messageData);</span><br><span class="line">        map.put(<span class="string">&quot;createTime&quot;</span>,createTime);</span><br><span class="line">        <span class="comment">//将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange</span></span><br><span class="line">        <span class="comment">//交换机会根据绑定键值（TestDirectRouting)转发到相应的队列中</span></span><br><span class="line">        rabbitTemplate.convertAndSend(<span class="string">&quot;TestDirectExchange&quot;</span>, <span class="string">&quot;TestDirectRouting&quot;</span>, map);</span><br><span class="line">        System.out.println(<span class="string">&quot;发送消息消息&quot;</span>+map);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>消费者</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener(queues = &quot;TestDirectQueue&quot;)</span><span class="comment">//监听的队列名称 TestDirectQueue</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DirectReceiver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(Map testMessage)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);<span class="comment">//每次睡眠1秒</span></span><br><span class="line">        &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;DirectReceiver消费者收到消息  : &quot;</span> + testMessage.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何保证RabbitMq中消息不会丢失"><a href="#如何保证RabbitMq中消息不会丢失" class="headerlink" title="如何保证RabbitMq中消息不会丢失"></a>如何保证RabbitMq中消息不会丢失</h3><p>RabbitMq的消息丢失主要分为以下几种情况</p>
+<ol>
+<li>Rabbitmq崩溃或者重启</li>
+<li>Rabbitmq生产者发送消息时丢失</li>
+<li>Rabbitmq消费者消费消息时丢失</li>
+</ol>
+<h4 id="Rabbitmq崩溃或者重启"><a href="#Rabbitmq崩溃或者重启" class="headerlink" title="Rabbitmq崩溃或者重启"></a>Rabbitmq崩溃或者重启</h4><p><strong>消息持久化</strong></p>
+<p>rabbitmq消息持久化，将消息写入磁盘中，可以保证rabbitmq崩溃时，消息不会丢失，但当大量消息需要写入磁盘时会影响性能。</p>
+<h5 id="1、Exchange-持久化"><a href="#1、Exchange-持久化" class="headerlink" title="1、Exchange 持久化"></a>1、Exchange 持久化</h5><p>设置durable=true</p>
+<p>创建的交换机是持久化的（默认持久化）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//根据交换机的父类的AbstractExchange的源代码可以看出交换机创建  默认是持久化的</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AbstractExchange</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(name, <span class="keyword">true</span>, <span class="keyword">false</span>);<span class="comment">//name,durable,autoDelete</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2、Queue-设置持久化"><a href="#2、Queue-设置持久化" class="headerlink" title="2、Queue 设置持久化"></a>2、Queue 设置持久化</h5><p>创建的队列是持久化的（需要指定）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Queue <span class="title">TestDirectQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//创建队列时指定为持久化</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Queue(<span class="string">&quot;TestDirectQueue&quot;</span>,<span class="keyword">true</span>);  <span class="comment">//true 是否持久</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、Message持久化发送"><a href="#3、Message持久化发送" class="headerlink" title="3、Message持久化发送"></a>3、Message持久化发送</h5><p>发送的消息是持久化的（默认持久化）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//发送消息设置发送模式deliveryMode=2代表持久化消息</span></span><br><span class="line">org.springframework.amqp.rabbit.core.RabbitTemplate默认情况下发送模式为deliveryMode=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Rabbitmq生产者发送消息时丢失"><a href="#Rabbitmq生产者发送消息时丢失" class="headerlink" title="Rabbitmq生产者发送消息时丢失"></a>Rabbitmq生产者发送消息时丢失</h4><p>生产者发送消息时主要分为以下几种情况</p>
+<ol>
+<li>消息推送到server，但是在server里找不到交换机</li>
+<li>消息推送到server，找到交换机了，但是没找到队列</li>
+<li>消息推送成功</li>
+</ol>
+<p><strong>如何确保消息发送成功？</strong></p>
+<p><strong>开启confirm模式</strong></p>
+<p>application.yml</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8021</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="comment">#给项目来个名字</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">rabbitmq-provider</span></span><br><span class="line">  <span class="comment">#配置rabbitMq 服务器</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">root</span></span><br><span class="line">    <span class="comment">#虚拟host 可以不设置,使用server默认host</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">JCcccHost</span></span><br><span class="line">    <span class="comment">#消息确认配置项</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">#确认消息已发送到交换机(Exchange)</span></span><br><span class="line">    <span class="attr">publisher-confirms:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment">#确认消息已发送到队列(Queue)</span></span><br><span class="line">    <span class="attr">publisher-returns:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>rabbitmq配置类</strong></p>
+<p>配置类中加入下面实例，重写ConfirmCallback ReturnCallback 中的方法</p>
+<ol>
+<li>找不到交换机时触发的是 ConfirmCallback 的回调函数。(false)</li>
+<li>找不到队列是触发的是 ConfirmCallback和ReturnCallback的回调函数。</li>
+<li>消息发送成功触发的是ConfirmCallback 的回调函数。（true）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RabbitTemplate <span class="title">createRabbitTemplate</span><span class="params">(ConnectionFactory connectionFactory)</span></span>&#123;</span><br><span class="line">    RabbitTemplate rabbitTemplate = <span class="keyword">new</span> RabbitTemplate();</span><br><span class="line">    rabbitTemplate.setConnectionFactory(connectionFactory);</span><br><span class="line">    <span class="comment">//设置开启Mandatory,才能触发回调函数,无论消息推送结果怎么样都强制调用回调函数</span></span><br><span class="line">    rabbitTemplate.setMandatory(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    rabbitTemplate.setConfirmCallback(<span class="keyword">new</span> RabbitTemplate.ConfirmCallback() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">confirm</span><span class="params">(CorrelationData correlationData, <span class="keyword">boolean</span> ack, String cause)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;ConfirmCallback:     &quot;</span>+<span class="string">&quot;相关数据：&quot;</span>+correlationData);</span><br><span class="line">            System.out.println(<span class="string">&quot;ConfirmCallback:     &quot;</span>+<span class="string">&quot;确认情况：&quot;</span>+ack);</span><br><span class="line">            System.out.println(<span class="string">&quot;ConfirmCallback:     &quot;</span>+<span class="string">&quot;原因：&quot;</span>+cause);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    rabbitTemplate.setReturnCallback(<span class="keyword">new</span> RabbitTemplate.ReturnCallback() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">returnedMessage</span><span class="params">(Message message, <span class="keyword">int</span> replyCode, String replyText, String exchange, String routingKey)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;ReturnCallback:     &quot;</span>+<span class="string">&quot;消息：&quot;</span>+message);</span><br><span class="line">            System.out.println(<span class="string">&quot;ReturnCallback:     &quot;</span>+<span class="string">&quot;回应码：&quot;</span>+replyCode);</span><br><span class="line">            System.out.println(<span class="string">&quot;ReturnCallback:     &quot;</span>+<span class="string">&quot;回应信息：&quot;</span>+replyText);</span><br><span class="line">            System.out.println(<span class="string">&quot;ReturnCallback:     &quot;</span>+<span class="string">&quot;交换机：&quot;</span>+exchange);</span><br><span class="line">            System.out.println(<span class="string">&quot;ReturnCallback:     &quot;</span>+<span class="string">&quot;路由键：&quot;</span>+routingKey);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Rabbitmq消费者消费消息时丢失"><a href="#Rabbitmq消费者消费消息时丢失" class="headerlink" title="Rabbitmq消费者消费消息时丢失"></a>Rabbitmq消费者消费消息时丢失</h4><p>为了保证消息从队列可靠地到达消费者，RabbitMQ提供消息确认机制(message acknowledgment)。确认模式主要分为下面三种：</p>
+<ol>
+<li>AcknowledgeMode.NONE：不确认</li>
+<li>AcknowledgeMode.AUTO：自动确认</li>
+<li>AcknowledgeMode.MANUAL：手动确认&gt; - 消费者收到消息后，手动调用basic.ack/basic.nack/basic.reject后，RabbitMQ收到这些消息后，才认为本次投递成功。<br>basic.ack用于肯定确认<br>basic.nack用于否定确认（注意：这是AMQP 0-9-1的RabbitMQ扩展）<br>basic.reject用于否定确认，但与basic.nack相比有一个限制:一次只能拒绝单条消息<br>消费者端以上的3个方法都表示消息已经被正确投递，但是basic.ack表示消息已经被正确处理，但是basic.nack（多条）,basic.reject（单条）表示没有被正确处理，但是RabbitMQ中仍然需要删除这条消息。</li>
+</ol>
+<p>添加配置类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageListenerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CachingConnectionFactory connectionFactory;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> DirectReceiver directReceiver;<span class="comment">//Direct消息接收处理类</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    DirectRabbitConfig directRabbitConfig;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SimpleMessageListenerContainer <span class="title">simpleMessageListenerContainer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SimpleMessageListenerContainer container = <span class="keyword">new</span> SimpleMessageListenerContainer(connectionFactory);</span><br><span class="line">        container.setConcurrentConsumers(<span class="number">1</span>);</span><br><span class="line">        container.setMaxConcurrentConsumers(<span class="number">1</span>);</span><br><span class="line">        container.setAcknowledgeMode(AcknowledgeMode.MANUAL); <span class="comment">// RabbitMQ默认是自动确认，这里改为手动确认消息</span></span><br><span class="line">        container.setQueues(directRabbitConfig.TestDirectQueue());</span><br><span class="line">        container.setMessageListener(directReceiver);</span><br><span class="line">        <span class="keyword">return</span> container;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>改写消费者</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Component</span><br><span class="line">@RabbitListener(queues &#x3D; &quot;TestDirectQueue&quot;)&#x2F;&#x2F;监听的队列名称 TestDirectQueue</span><br><span class="line">public class DirectReceiver implements ChannelAwareMessageListener &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onMessage(Message message, Channel channel) throws Exception &#123;</span><br><span class="line">        long deliveryTag &#x3D; message.getMessageProperties().getDeliveryTag();</span><br><span class="line">        try &#123;</span><br><span class="line">&#x2F;&#x2F;            Thread.sleep(2000);</span><br><span class="line">            &#x2F;&#x2F;因为传递消息的时候用的map传递,所以将Map从Message内取出需要做些处理</span><br><span class="line">            String msg &#x3D; message.toString();</span><br><span class="line">            String[] msgArray &#x3D; msg.split(&quot;&#39;&quot;);&#x2F;&#x2F;可以点进Message里面看源码,单引号直接的数据就是我们的map消息数据</span><br><span class="line">            System.out.println(&quot;消费者手动确定消费：&quot; + msgArray[1].trim());</span><br><span class="line">&#x2F;&#x2F;          正常处理成功</span><br><span class="line">          channel.basicAck(deliveryTag, true);</span><br><span class="line">&#x2F;&#x2F;          重新放入队列</span><br><span class="line">&#x2F;&#x2F;            channel.basicNack(deliveryTag, false, true);</span><br><span class="line">&#x2F;&#x2F;          抛弃此条消息</span><br><span class="line">&#x2F;&#x2F;          channel.basicNack(deliveryTag, false, false);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            channel.basicNack(deliveryTag, false, true);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" rel="external nofollow noreferrer">SunnyWs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://sunnyws.com/posts/b543ced0/">https://sunnyws.com/posts/b543ced0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sunnyws.com" target="_blank">SunnyWs'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a><a class="post-meta__tags" href="/tags/RabbitMQ/">RabbitMQ</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/RabbitMQ.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/cacc85bf/"><img class="prev-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/Docker安装Mysql.jpg" onerror="onerror=null;src='/img/cover/index.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Docker安装Mysql</div></div></a></div><div class="next-post pull-right"><a href="/posts/104c04d2/"><img class="next-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/微服务实战(四).jpg" onerror="onerror=null;src='/img/cover/index.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">微服务实战(四) Sentinel 服务的限流 熔断 降级</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/bdcda0c6/" title="Spring缓存@Cache整合Redis"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/Spring缓存@Cache整合Redis.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-10</div><div class="title">Spring缓存@Cache整合Redis</div></div></a></div><div><a href="/posts/6fccc6c0/" title="SpringBoot整合AOP"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/SpringBoot整合AOP.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-07</div><div class="title">SpringBoot整合AOP</div></div></a></div><div><a href="/posts/6efdf379/" title="SpringBoot整合xxl-job"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/SpringBoot整合xxl-job.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-15</div><div class="title">SpringBoot整合xxl-job</div></div></a></div><div><a href="/posts/2d90bae4/" title="SpringBoot集成WebSocket"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/SpringBoot集成WebSocket.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-23</div><div class="title">SpringBoot集成WebSocket</div></div></a></div><div><a href="/posts/94f54d0e/" title="SpringBoot使用注解@Log记录操作日志"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/SpringBoot使用注解记录操作日志.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-19</div><div class="title">SpringBoot使用注解@Log记录操作日志</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" style="background-image: url(https://cdn.jsdelivr.net/gh/sunnyws/BlogAssets@master/img/blogimg/RabbitMQ.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By SunnyWs</div><div class="icp"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><span>豫ICP备19019070号-1</span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const initData = {
+      el: '#vcomment',
+      appId: 'T2GJNCM0qQ4YiRqifywyUvbI-gzGzoHsz',
+      appKey: 'lc9PIjqrN3NDslBgWu7aVg7r',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: {"1":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/1.gif","2":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/2.gif","3":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/3.gif","4":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/4.gif","5":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/5.gif","6":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/6.gif","7":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/7.gif","8":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/8.gif","9":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/9.gif","10":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/10.gif","11":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/11.gif","12":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/12.gif","13":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/13.gif","14":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/14.gif","15":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/15.gif","16":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/16.gif","17":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/17.gif","18":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/18.gif","19":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/19.gif","20":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/20.gif","21":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/21.gif","22":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/22.gif","23":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/23.gif","24":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/24.gif","25":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/25.gif","26":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/26.gif","27":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/27.gif","28":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/28.gif","29":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/29.gif","30":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/30.gif","31":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/31.gif","32":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/32.gif","33":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/33.gif","34":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/34.gif","35":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/35.gif","36":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/36.gif","37":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/37.gif","38":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/38.gif","39":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/39.gif","40":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/40.gif","41":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/41.gif","42":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/42.gif","43":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/43.gif","44":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/44.gif","45":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/45.gif","46":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/46.gif","47":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/47.gif","48":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/48.gif","49":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/49.gif","50":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/50.gif","51":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/51.gif","52":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/52.gif","53":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/53.gif","54":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/54.gif","55":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/55.gif","56":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/56.gif","57":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/57.gif","58":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/58.gif","59":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/59.gif","60":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/60.gif","61":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/61.gif","62":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/62.gif","63":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/63.gif","64":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/64.gif","65":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/65.gif","66":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/66.gif","67":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/67.gif","68":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/68.gif","69":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/69.gif","70":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/70.gif","71":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/71.gif","72":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/72.gif","73":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/73.gif","74":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/74.gif","75":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/75.gif","76":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/76.gif","77":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/77.gif","78":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/78.gif","79":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/79.gif","80":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/80.gif","81":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/81.gif","82":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/82.gif","83":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/83.gif","84":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/84.gif","85":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/85.gif","86":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/86.gif","87":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/87.gif","88":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/88.gif","89":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/89.gif","90":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/90.gif","91":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/91.gif","92":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/92.gif","93":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/93.gif","94":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/94.gif","95":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/95.gif","96":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/96.gif","97":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/97.gif","98":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/98.gif","99":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/99.gif","100":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/100.gif","101":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/101.gif","102":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/102.gif","103":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/103.gif","104":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/104.gif","105":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/105.gif","106":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/106.gif","107":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/107.gif","108":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/108.gif","109":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/109.gif","110":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/110.gif","111":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/111.gif","112":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/112.gif","113":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/113.gif","114":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/114.gif","115":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/115.gif","116":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/116.gif","117":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/117.gif","118":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/118.gif","119":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/119.gif","120":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/120.gif","121":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/121.gif","122":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/122.gif","123":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/123.gif","124":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/124.gif","125":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/125.gif","126":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/126.gif","127":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/127.gif","128":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/128.gif","129":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/129.gif","130":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/130.gif","131":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/131.gif","132":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/132.gif","133":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/133.gif","134":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/134.gif","135":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/135.gif","136":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/136.gif","137":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/137.gif","138":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/138.gif","139":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/139.gif","140":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/140.gif","141":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/141.gif","142":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/142.gif","143":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/143.gif","144":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/144.gif","145":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/145.gif","146":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/146.gif","147":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/147.gif","148":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/148.gif","149":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/149.gif","150":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/150.gif","151":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/151.gif","152":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/152.gif","153":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/153.gif","154":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/154.gif","155":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/155.gif","156":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/156.gif","157":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/157.gif","158":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/158.gif","159":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/159.gif","160":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/160.gif","161":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/161.gif","162":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/162.gif","163":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/163.gif","164":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/164.gif","165":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/165.gif","166":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/166.gif","167":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/167.gif","168":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/168.gif","169":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/169.gif","170":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/170.gif","171":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/171.gif","172":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/172.gif","173":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/173.gif","174":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/174.gif","175":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/175.gif","176":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/176.gif","177":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/177.gif","178":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/178.gif","179":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/179.gif","180":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/180.gif","181":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/181.gif","182":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/182.gif","183":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/183.gif","184":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/184.gif","185":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/185.gif","186":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/186.gif","187":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/187.gif","188":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/188.gif","189":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/189.gif","190":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/190.gif","191":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/191.gif","192":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/192.gif","193":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/193.gif","194":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/0.gif","195":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/195.gif","196":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/196.gif","197":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/197.gif","198":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/198.gif","199":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/199.gif","200":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/200.gif","201":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/201.gif","202":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/202.gif","203":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/203.gif","204":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/204.gif","205":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/205.gif","206":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/206.gif","207":"https://cdn.jsdelivr.net/gh/blogimg/emotion/qq_2020f/207.gif"},
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div class="aplayer no-destroy" data-id="7687642830" data-server="tencent" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="false" muted></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', '', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+
+document.addEventListener('pjax:send', function () {
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  $(window).off('scroll')
+
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
+
+})</script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"log":false});</script></body></html>
